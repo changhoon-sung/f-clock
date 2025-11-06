@@ -1,0 +1,84 @@
+f-clock
+=======
+
+Time encoder/decoder using prime factorization.
+(ACM Mini Coding Challenge: Code the worst way to tell time in 1 hour)
+
+SYNOPSIS
+--------
+```
+python f-clock.py [-v]
+```
+
+DESCRIPTION
+-----------
+Encodes current time (HHMMSS) as products of large primes. Each digit (0-9)
+gets mapped to a ~128-bit composite number by selecting N random primes from
+a pool of first 70 primes, where N equals the digit value.
+
+Decodes via factorization.
+
+OPTIONS
+-------
+  -v, --verbose Print encoding/decoding details, otherwise just encoded numbers.
+
+ALGORITHM
+---------
+- Pool: First 70 primes (2..349)
+- encoder(d): Select d + 1 primes, adjust exponents to hit ~128 bits
+- decoder(n): Factorize, count distinct primes from pool and subtract 1 = original digit
+
+EXAMPLE
+-------
+```
+$ python f-clock.py
+248187293863347975401129272743132504001
+5983127612737891438490297376702478583552
+513230455327656227499061920163813355701
+1887701754357656323188057196765825439557
+12268194810095027807998688349789677233369
+972786042517719014174576083150881262357
+----------------------------------------------------------------------
+```
+
+```
+$ python f-clock.py -v
+======================================================================
+Time: 18:53:38
+======================================================================
+H10  (digit=1)
+  → Bits: 131
+  → Value: 1665654994060189378680533192121882445201
+H1   (digit=8)
+  → Bits: 133
+  → Value: 5858771851071567381277874695848184565231
+M10  (digit=5)
+  → Bits: 131
+  → Value: 1379070871412076705504755551794167317103
+M1   (digit=3)
+  → Bits: 131
+  → Value: 1696311721422537156096998872284450936271
+S10  (digit=3)
+  → Bits: 130
+  → Value: 1065015461908755996834889307380430164993
+S1   (digit=8)
+  → Bits: 132
+  → Value: 2771291396559170040774347401033064613089
+
+──────────────────────────────────────────────────────────────────────
+✓  H10 : 1 → encoded → decoded: 1, factors: {151: 18}
+✓  H1  : 8 → encoded → decoded: 8, factors: {37: 2, 41: 2, 43: 2, 71: 7, 83: 2, 107: 2, 193: 2, 227: 2}
+✓  M10 : 5 → encoded → decoded: 5, factors: {13: 6, 139: 3, 197: 7, 277: 2, 347: 2}
+✓  M1  : 3 → encoded → decoded: 3, factors: {31: 8, 53: 9, 227: 5}
+✓  S10 : 3 → encoded → decoded: 3, factors: {97: 6, 163: 7, 211: 5}
+✓  S1  : 8 → encoded → decoded: 8, factors: {13: 4, 23: 9, 31: 3, 41: 2, 97: 2, 113: 2, 163: 2, 337: 1}
+──────────────────────────────────────────────────────────────────────
+Decoding successful!
+Elapsed time: 1.98ms
+======================================================================
+```
+
+REQUIREMENTS
+------------
+Python 3.x
+No external dependencies.
